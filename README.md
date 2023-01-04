@@ -2,6 +2,8 @@
 
 **This repository is under editting.**
 
+![model](images/model.png)
+
 ## Co-occurrence-Anomaly-Detection-Screw-Dataset (CAD-SD)
 
 "Co-occurrence Anomaly Detection Screw Dataset (CAD-SD)" for anomaly detection, including local anomalies and co-occurrence anomalies.
@@ -13,4 +15,4 @@ The CAD-SD includes normal images of the product with a hex nut attached to one 
 ### Shooting Environment
 The camera used was a DFK33UX183 manufactured by Argo Corporation. The aperture and shooting distance was set at 16 and 25 cm, respectively. The size of the image in the dataset was trimmed from 5472×3648 to 700×700. An HPR2-75SW manufactured by CCS Corporation was used for the lighting, and PD2-5024 (A) was used for the power supply.
 
-![examples](images/CAD-SD_examples.png)
+![cadsd_examples](images/CAD-SD_examples.png)
