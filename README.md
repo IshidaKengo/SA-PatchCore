@@ -1,23 +1,18 @@
 # SA-PatchCore
 
-This repository is implementaion of SA-PatchCore for local and co-occurrence anomaly detection.
+**This repository is implementaion of SA-PatchCore for local and co-occurrence anomaly detection.**
 
 ### Usage 
-
 Donwload "Co-occurrence Anomaly Detection Screw Dataset (CAD-SD)" to ./dataset from this [[Link](https://drive.google.com/drive/folders/1yeampzTiB4uoTmmqIZkeCdMIXGujl3cU?usp=sharing)].
-
 Install python 3.8, torch==1.8.1, torchvision==0.9.1
-
 Install packages with:
 ~~~
 pip install -r requirements.txt
 ~~~
-
 Run with:
 ~~~
 python run.py 
 ~~~
-
 ![model](images/model.png)
 
 ## Co-occurrence-Anomaly-Detection-Screw-Dataset (CAD-SD)
@@ -35,4 +30,5 @@ The camera used was a DFK33UX183 manufactured by Argo Corporation. The aperture 
 
 ## Reference
 [1] https://github.com/amazon-science/patchcore-inspection
+
 [2] https://github.com/hcw-00/PatchCore_anomaly_detection
