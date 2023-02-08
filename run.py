@@ -231,38 +231,28 @@ class MODEL(pl.LightningModule):
         self.input_x_list.append(x)        
 
     def test_epoch_end(self, outputs):
-        
-        a = self.defect_types.count('0_good') #210
-        b = self.defect_types.count('1_scratch') #41
-        c = self.defect_types.count('2_paint') #41
-        d = self.defect_types.count('3_over-coupling') #44
-        e = self.defect_types.count('4_lacking') #40
-        
-        num_defect_types = [a,b,c,d,e]
-        name_defect_types = ['good', 'scratch', 'paint', 'over-coupling', 'lacking']
+        name_defect_types = ['0_good', '1_scratch', '2_paint', '3_over-coupling', '4_lacking']  #anomaly category names(directory names) in test directory
+        num_defect_types = []
+        for defect_type in name_defect_types:
+            num_defect_types.append(self.defect_types.count(defect_type))
+            #0_good:210, 1_scratch:41, 2_paint:41, 3_over-coupling:44, 4_lacking:44      
 
         ## caliculate AUC
-        
         img_auc = roc_auc_score(self.gt_list_img_lvl, self.pred_list_img_lvl)
-        
-        #values = {'img_auc': img_auc}
-        #self.log_dict(values)
 
         with open(self.result_path + r'/AUROC.csv', 'a') as f:
             writer = csv.writer(f)
             writer.writerow(['All', img_auc])
         
-        front, rear = a,a 
+        front, rear = num_defect_types[0], num_defect_types[0]
         for (length, name) in zip(num_defect_types[1:], name_defect_types[1:]):
             rear += length
 
-            labels= np.concatenate([self.gt_list_img_lvl[0:a],
+            labels= np.concatenate([self.gt_list_img_lvl[0:num_defect_types[0]],
                                         self.gt_list_img_lvl[front:rear]], axis = 0)
-            scores = np.concatenate([self.pred_list_img_lvl[0:a],
+            scores = np.concatenate([self.pred_list_img_lvl[0:num_defect_types[0]],
                                         self.pred_list_img_lvl[front:rear]], axis = 0)
             img_auc = roc_auc_score(labels, scores)
-            #values = {'img_auc': img_auc}
-            #self.log_dict(values)
 
             with open(self.result_path + r'/AUROC.csv', 'a') as f:
                 writer = csv.writer(f)
@@ -276,19 +266,18 @@ class MODEL(pl.LightningModule):
             max_num = temp_map.max()
             min_num = temp_map.min()
                 
-            saturate_hi_num = (max_num - min_num) * 1.0 #upper limit of anomaly maps
-            saturate_lw_num = (max_num - min_num) * 0.7 #lower limit of anomaly maps
+            saturate_hi_num = (max_num - min_num)*1.0 + min_num  #upper limit of anomaly maps
+            saturate_lw_num = (max_num - min_num)*0.4 + min_num  #lower limit of anomaly maps
             
             save_dir = os.path.join(self.result_path, 'anomaly maps')
             if os.path.isdir(save_dir) == False:
                 os.mkdir(save_dir)
             
-            self.save_anomaly_map(self.anomaly_map_all[0:a], self.input_x_list[0:a], 'good', saturate_hi_num, saturate_lw_num, save_dir)
-            self.save_anomaly_map(self.anomaly_map_all[a:a+b], self.input_x_list[a:a+b], 'scratch', saturate_hi_num, saturate_lw_num, save_dir)
-            self.save_anomaly_map(self.anomaly_map_all[a+b:a+b+c], self.input_x_list[a+b:a+b+c], 'paint', saturate_hi_num, saturate_lw_num, save_dir)
-            self.save_anomaly_map(self.anomaly_map_all[a+b+c:a+b+c+d], self.input_x_list[a+b+c:a+b+c+d], 'over-coupling', saturate_hi_num, saturate_lw_num, save_dir)
-            self.save_anomaly_map(self.anomaly_map_all[a+b+c+d:a+b+c+d+e], self.input_x_list[a+b+c+d:a+b+c+d+e], 'lacking', saturate_hi_num, saturate_lw_num, save_dir)
-
+            front, rear = 0,0
+            for (length, name) in zip(num_defect_types, name_defect_types):
+                rear += length
+                self.save_anomaly_map(self.anomaly_map_all[front:rear], self.input_x_list[front:rear], name, saturate_hi_num, saturate_lw_num, save_dir)
+                front += length
                 
 def get_args():
     parser = argparse.ArgumentParser(description='ANOMALYDETECTION')
