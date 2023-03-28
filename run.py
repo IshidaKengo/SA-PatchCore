@@ -283,7 +283,6 @@ def get_args():
     parser = argparse.ArgumentParser(description='ANOMALYDETECTION')
     parser.add_argument('--phase', choices=['train','test'], default='train')
     parser.add_argument('--dataset_path', default=r'./dataset/Co-occurrence Anomaly Detection Screw Dataset') 
-    parser.add_argument('--num_epochs', default=1)
     parser.add_argument('--batch_size', default=1)
     parser.add_argument('--load_size', default=256) 
     parser.add_argument('--input_size', default=224)
@@ -299,7 +298,7 @@ if __name__ == '__main__':
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     args = get_args()
     
-    trainer = pl.Trainer.from_argparse_args(args, default_root_dir=args.output_path, max_epochs=args.num_epochs, gpus = (device=="cuda") )
+    trainer = pl.Trainer.from_argparse_args(args, default_root_dir=args.output_path, max_epochs=1, gpus = (device=="cuda") )
     model = MODEL(hparams=args)
     if args.phase == 'train':
         trainer.fit(model)
