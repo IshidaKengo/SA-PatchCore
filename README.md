@@ -1,6 +1,6 @@
 # SA-PatchCore
 
-**This repository is implementaion of SA-PatchCore for local and co-occurrence anomaly detection.**
+**This repository is implementation of SA-PatchCore for local and co-occurrence anomaly detection.**
 
 ### Usage 
 Donwload "Co-occurrence Anomaly Detection Screw Dataset (CAD-SD)" to ./dataset from this [[Link](https://drive.google.com/drive/folders/1yeampzTiB4uoTmmqIZkeCdMIXGujl3cU?usp=sharing)].  
